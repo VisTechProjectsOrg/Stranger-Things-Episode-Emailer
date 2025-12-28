@@ -1,0 +1,23 @@
+# Config with credentials
+config/config.json
+
+# Generated files
+latest_episode.json
+app.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+venv/
+env/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
