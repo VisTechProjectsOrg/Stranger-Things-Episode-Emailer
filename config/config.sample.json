@@ -1,9 +1,10 @@
 {
     "email": {
-        "smtp_server": "smtp.gmail.com",
-        "smtp_port": 587,
-        "username": "your-email@gmail.com",
-        "password": "your-app-password",
+        "smtp_server": "localhost",
+        "smtp_port": 25,
+        "from": "Stranger Things Episodes <episodes@example.com>",
+        "username": "",
+        "password": "",
         "to": [
             "recipient1@example.com",
             "recipient2@example.com"

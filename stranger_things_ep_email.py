@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime, date
 import smtplib
+from email.utils import parseaddr
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
@@ -39,16 +40,20 @@ def load_config():
 
 def send_email(subject, body, email_config, log):
     msg = MIMEMultipart()
-    msg["From"] = email_config["username"]
+    sender = email_config.get("from") or email_config["username"]
+    msg["From"] = sender
     msg["To"] = ", ".join(email_config["to"])
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "html"))
 
     try:
         with smtplib.SMTP(email_config["smtp_server"], email_config["smtp_port"]) as server:
-            server.starttls()
-            server.login(email_config["username"], email_config["password"])
-            server.sendmail(email_config["username"], email_config["to"], msg.as_string())
+            # The server's own mail system takes the message as is; a remote one (Gmail)
+            # needs TLS and a login, which a password in the config switches on.
+            if email_config.get("password"):
+                server.starttls()
+                server.login(email_config["username"], email_config["password"])
+            server.sendmail(parseaddr(sender)[1], email_config["to"], msg.as_string())
     except Exception as e:
         log.error(f"Failed to send email: {e}")
         return False
